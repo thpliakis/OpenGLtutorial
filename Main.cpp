@@ -47,6 +47,12 @@ int main()
 		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
 		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
 	};
+	GLfloat vertices2[] =
+	{
+		-0.5f, 0.5f , 0.0f, // Lower left corner
+		-0.5f, 0.5f / 3, 0.0f, // Lower right corner
+		0.0f, 0.80f , 0.0f // Upper corner
+	};
 
 	/*GLfloat vertices[] = {
 	 0.5f,  0.5f, 0.0f,  // top right
@@ -142,15 +148,17 @@ int main()
 	}
 	
 	// Generate Vertex Array object before VBO
-	GLuint VAO;
+	GLuint VAO, VAO2;
 	glGenVertexArrays(1, &VAO);
+	glGenVertexArrays(1, &VAO2);
 
 	// Generate vertex buffer object
-	GLuint VBO;
+	GLuint VBO,VBO2;
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &VBO2);
 
-	GLuint EBO;
-	glGenBuffers(1, &EBO);
+	//GLuint EBO;
+	//glGenBuffers(1, &EBO);
 	
 	// ..:: Initialization code (done once (unless your object frequently changes)) :: ..
 	// 1. bind Vertex Array Object
@@ -159,13 +167,20 @@ int main()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Make VBO the curent binded object
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);	// Store vertices in VBO
 	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// 3. then set our vertex attributes pointers
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
 	glEnableVertexAttribArray(0);
 	
+	glBindVertexArray(VAO2);
+	// 2. copy our vertices array in a buffer for OpenGL to use
+	glBindBuffer(GL_ARRAY_BUFFER, VBO2); // Make VBO the curent binded object
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glEnableVertexAttribArray(0);
+
 	
 	// Keep the window open, close window only when a funtion tells the window to close, ex. close button
 	// Main while loop
@@ -180,16 +195,19 @@ int main()
 
 		// Call shader program
 		glUseProgram(shaderProgram);
+		 // Make VBO the curent binded object
 		glBindVertexArray(VAO);
-
 		// Rectangle Drawing function
 		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//glBindVertexArray(0);
 
 		// Drawing function
 		glDrawArrays(GL_TRIANGLES, 0, 3);
-		glfwSwapBuffers(window);
 
+		glBindVertexArray(VAO2);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
+		glfwSwapBuffers(window);
 		// Tell glfw to proccess all the process all Poll events such as the window appearing or resize
 		// Take care of all GLFW events
 		glfwPollEvents();
