@@ -27,10 +27,10 @@ void processInput(GLFWwindow* window);
 
 
 int main()
-{ 
+{
 	// Initialize GLFW
 	glfwInit();
-	
+
 	// Tell GLFW what version of OpenGL we are using by giving it hints
 	// We are using version OpenGL 3.3
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -39,25 +39,15 @@ int main()
 	//GLFW_OPENGL_PROFILE == a package of funtions(2 packages: core(modern functions), compatibility(modern and outdated functions))
 	// Tell GLFW we are using CORE profile
 	// So that means we only have the modern functions
-	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	/*GLfloat vertices[] =
+	GLfloat vertices[] =
 	{
 		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
 		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
 		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
-	};*/
+	};
 
-	GLfloat vertices[] = {
-	 0.5f,  0.5f, 0.0f,  // top right
-	 0.5f, -0.5f, 0.0f,  // bottom right
-	-0.5f, -0.5f, 0.0f,  // bottom left
-	-0.5f,  0.5f, 0.0f   // top left 
-	};
-	GLuint indices[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3    // second triangle
-	};
 
 	// Create window object 5 inputs(hight,width,name,fullscreen or not,...)
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "PenfGLtutorial"
@@ -85,7 +75,7 @@ int main()
 	// tell openGL the area of the window to render(bottom left == (0,0), top right == (800,800)
 	// Specify the viewport of OpenGL in the window
 	// In this case the viewport goes from x=0, y=0 to x=800, y=800
-	glViewport(0,0,800,800);
+	glViewport(0, 0, 800, 800);
 
 	// prepare a buffer by giving it another color (navy blue)
 	glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
@@ -140,33 +130,26 @@ int main()
 	if (!success) {
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
 	}
-	
+
 	// Generate Vertex Array object before VBO
-	GLuint VAO;
+	unsigned int VAO;
 	glGenVertexArrays(1, &VAO);
 
 	// Generate vertex buffer object
-	GLuint VBO;
+	unsigned int VBO;
 	glGenBuffers(1, &VBO);
 
-	GLuint EBO;
-	glGenBuffers(1, &EBO);
-	
 	// ..:: Initialization code (done once (unless your object frequently changes)) :: ..
 	// 1. bind Vertex Array Object
 	glBindVertexArray(VAO);
 	// 2. copy our vertices array in a buffer for OpenGL to use
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Make VBO the curent binded object
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);	// Store vertices in VBO
-	
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
-
 	// 3. then set our vertex attributes pointers
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	
-	
+
+
 	// Keep the window open, close window only when a funtion tells the window to close, ex. close button
 	// Main while loop
 	while (!glfwWindowShouldClose(window)) {
@@ -182,12 +165,9 @@ int main()
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
 
-		// Rectangle Drawing function
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
-
 		// Drawing function
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
+
 		glfwSwapBuffers(window);
 
 		// Tell glfw to proccess all the process all Poll events such as the window appearing or resize
