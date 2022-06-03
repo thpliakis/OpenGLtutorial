@@ -41,19 +41,19 @@ int main()
 	// So that means we only have the modern functions
 	glfwWindowHint(GLFW_OPENGL_PROFILE,GLFW_OPENGL_CORE_PROFILE);
 
-	/*GLfloat vertices[] =
+	GLfloat vertices[] =
 	{
 		-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower left corner
 		0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f, // Lower right corner
 		0.0f, 0.5f * float(sqrt(3)) * 2 / 3, 0.0f // Upper corner
-	};*/
+	};
 
-	GLfloat vertices[] = {
+	/*GLfloat vertices[] = {
 	 0.5f,  0.5f, 0.0f,  // top right
 	 0.5f, -0.5f, 0.0f,  // bottom right
 	-0.5f, -0.5f, 0.0f,  // bottom left
 	-0.5f,  0.5f, 0.0f   // top left 
-	};
+	};*/
 	GLuint indices[] = {  // note that we start from 0!
 		0, 1, 3,   // first triangle
 		1, 2, 3    // second triangle
@@ -183,11 +183,11 @@ int main()
 		glBindVertexArray(VAO);
 
 		// Rectangle Drawing function
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		glBindVertexArray(0);
+		//glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glBindVertexArray(0);
 
 		// Drawing function
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 		glfwSwapBuffers(window);
 
 		// Tell glfw to proccess all the process all Poll events such as the window appearing or resize
