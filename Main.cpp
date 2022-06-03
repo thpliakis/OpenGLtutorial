@@ -17,7 +17,12 @@ const char* fragmentShaderSource = "#version 330 core\n"
 "   FragColor = vec4(0.8f, 0.3f, 0.02f, 1.0f);\n"
 "}\n\0";
 
+// settings
+const unsigned int SCR_WIDTH = 800;
+const unsigned int SCR_HEIGHT = 800;
+
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void processInput(GLFWwindow* window);
 
 
 
@@ -46,7 +51,7 @@ int main()
 
 	// Create window object 5 inputs(hight,width,name,fullscreen or not,...)
 	// Create a GLFWwindow object of 800 by 800 pixels, naming it "PenfGLtutorial"
-	GLFWwindow* window = glfwCreateWindow(800, 800, "OpenGLtutorial", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGLtutorial", NULL, NULL);
 	// Error check if the window fails to be created
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -73,19 +78,24 @@ int main()
 	glViewport(0,0,800,800);
 
 	// prepare a buffer by giving it another color (navy blue)
-	glad_glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
+	//glad_glClearColor(0.07f, 0.13f, 0.17f, 1.0f);
 
 	// Tell opengl to execute the command we've told it to prepare for 
 	// Clean the back buffer and assign the new color to it
-	glClear(GL_COLOR_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT);
 	// Swap the back budder with the front buffer
 
 	// Keep the window open, close window only when a funtion tells the window to close, ex. close button
 	// Main while loop
 	while (!glfwWindowShouldClose(window)) {
+
+		processInput(window);
+
 		glfwSwapBuffers(window);
 		glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
 
 		// Tell glfw to proccess all the process all Poll events such as the window appearing or resize
 		// Take care of all GLFW events
@@ -99,7 +109,20 @@ int main()
 	return 0;
 }
 
+
+// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
+// ---------------------------------------------------------------------------------------------------------
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+		glfwSetWindowShouldClose(window, true);
+}
+
+// glfw: whenever the window size changed (by OS or user resize) this callback function executes
+// ---------------------------------------------------------------------------------------------
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
+	// make sure the viewport matches the new window dimensions; note that width and 
+	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
